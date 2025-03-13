@@ -1,7 +1,7 @@
 ## Ekran Görüntüleri
 Camera Screen |  List Screen | 
 --- | --- | 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/9nr0nfb.png) | ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/5s6qujk.png) |
+![Uygulama Ekran Görüntüsü](https://github.com/serkanakcay/assets/blob/main/9nr0nfb.jpeg) | ![Uygulama Ekran Görüntüsü](https://github.com/serkanakcay/assets/blob/main/5s6qujk.jpeg) |
 
 # Carrot Screen
 
