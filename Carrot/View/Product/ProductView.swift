@@ -3,12 +3,15 @@ import SwiftUI
 struct ProductView: View {
     @StateObject private var viewModel = ProductViewModel()
     let barcode: String
+    @Environment(\.presentationMode) var presentationMode  // Kapatma butonu için
+        @State  var isFavorite = false  // Favori butonu durumu
+
 
     var body: some View {
         NavigationStack {
             ZStack {
                 // Arka plan için LinearGradient
-                LinearGradient(gradient: Gradient(colors: [Color.white, .bGcolor]),
+                LinearGradient(gradient: Gradient(colors: [Color.white, .white]),
                                startPoint: .center,
                                endPoint: .bottom)
                     .edgesIgnoringSafeArea(.all)  // Gradient tüm ekrana uygulanacak
@@ -26,7 +29,7 @@ struct ProductView: View {
                                             image
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(maxHeight: 200)
+                                                .frame(maxHeight: 100)  // Resim boyutunu küçülttüm
                                                 .cornerRadius(10)
                                         case .failure:
                                             Text("Resim yüklenemedi.")
@@ -42,7 +45,7 @@ struct ProductView: View {
                                 }
 
                                 // Ürün adı
-                                Text("Ürün Adı: \(product.productName ?? "Bilinmiyor")")
+                                Text("\(product.productName ?? "Bilinmiyor")")
                                     .font(.title)
                                     .padding(.bottom, 10)
 
@@ -65,13 +68,44 @@ struct ProductView: View {
                     }
                     .padding()
                     .onAppear {
-                        viewModel.fetchProduct(by: barcode)
+                       
+                                               }
+                    }
+                }
+            }
+            // Navigation title olarak ürün adı
+            .navigationTitle(viewModel.product?.productName ?? "Ürün Bilgisi")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            // Toolbar kısmı
+            .toolbar {
+                // Sol tarafta geri butonu
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.caption2)
+                            .padding()
+                            .background(Color.buttons.opacity(0.2))  // Arka plan turuncu
+                            .foregroundColor(.gray)   // İkon rengi siyah
+                            .clipShape(Circle())       // İkonu yuvarlak hale getirdim
+                    }
+                }
+                // Sağ tarafta favori butonu
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isFavorite.toggle()  // Favori durumunu değiştir
+                    }) {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundColor(isFavorite ? .buttons: .buttons)  // Favori ise dolu kalp, değilse boş kalp
                     }
                 }
             }
         }
     }
 
+    
     func productNutrientsView(product: Product) -> some View {
         VStack(alignment: .leading, spacing: 20) {
             // Negatifler
@@ -86,21 +120,19 @@ struct ProductView: View {
                     // NutriscoreData'dan negatif puanı getiriyoruz
                     if let negativePoints = product.nutriscoreData?.negativePoints {
                         ZStack {
-                            // Dikdörtgen arka plan
                             Rectangle()
                                 .fill(
-                                    LinearGradient(gradient: Gradient(colors: [Color.bGcolor.opacity(0.2), Color.white]),
-                                                   startPoint: .bottom,  // Gradyan alttan başlar
-                                                   endPoint: .top)  // Yukarıya doğru biter
+                                    LinearGradient(gradient: Gradient(colors: [Color.white.opacity(0.2), Color.white]),
+                                                   startPoint: .bottom,
+                                                   endPoint: .top)
                                 )
-                                .frame(width: 120, height: 20)  // İstediğiniz boyut
-                                .cornerRadius(5)  // Kenarları yuvarlak
-                                .overlay(  // Kenarlarına stroke ekleme
+                                .frame(width: 120, height: 20)
+                                .cornerRadius(5)
+                                .overlay(
                                     RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.gray, lineWidth: 1)  // Stroke rengi ve kalınlığı
+                                        .stroke(Color.gray, lineWidth: 1)
                                 )
                             
-                            // İçerideki text
                             Text("Negatif Puan: \(negativePoints)")
                                 .font(.caption)
                                 .foregroundColor(.black)
@@ -130,30 +162,36 @@ struct ProductView: View {
             // Pozitifler
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
+                   
                     Text("Pozitifler")
+                    Button(action: {
+                        //DİKKAT
+                       
+                    }, label: {
+                        /*@START_MENU_TOKEN@*/Text("Button")/*@END_MENU_TOKEN@*/
+                    })
+                   
+
                         .font(.headline)
                         .foregroundColor(.black)
                     
                     Spacer()
                     
-                    // NutriscoreData'dan negatif puanı getiriyoruz
                     if let positivePoints = product.nutriscoreData?.positivePoints {
                         ZStack {
-                            // Dikdörtgen arka plan
                             Rectangle()
                                 .fill(
-                                    LinearGradient(gradient: Gradient(colors: [Color.bGcolor.opacity(0.2), Color.white]),
-                                                   startPoint: .bottom,  // Gradyan alttan başlar
-                                                   endPoint: .top)  // Yukarıya doğru biter
+                                    LinearGradient(gradient: Gradient(colors: [Color.white.opacity(0.2), Color.white]),
+                                                   startPoint: .bottom,
+                                                   endPoint: .top)
                                 )
-                                .frame(width: 120, height: 20)  // İstediğiniz boyut
-                                .cornerRadius(5)  // Kenarları yuvarlak
-                                .overlay(  // Kenarlarına stroke ekleme
+                                .frame(width: 120, height: 20)
+                                .cornerRadius(5)
+                                .overlay(
                                     RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.gray, lineWidth: 1)  // Stroke rengi ve kalınlığı
+                                        .stroke(Color.gray, lineWidth: 1)
                                 )
                             
-                            // İçerideki text
                             Text("Pozitif Puan: \(positivePoints)")
                                 .font(.caption)
                                 .foregroundColor(.black)
@@ -224,6 +262,7 @@ struct ProductView: View {
                     Text("Toplam Puan: \(nutriscoreData.score ?? 0)")
                         .font(.subheadline)
                 }
+            
             }
         }
         .padding()
@@ -231,7 +270,35 @@ struct ProductView: View {
         .cornerRadius(10)
         .padding(.horizontal)
     }
-}
+    
+    func escoreView(nutriscoreData: NutriscoreData) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Nutriscore ve Puanlama Detayları:")
+                .font(.headline)
+                .padding(.bottom, 5)
+
+            HStack {
+                Image("nutriscore-\(nutriscoreData.grade?.lowercased() ?? "unknown")")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 50)
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Puan: \(nutriscoreData.grade?.uppercased() ?? "Bilinmiyor")")
+                        .font(.headline)
+                    Text("Toplam Puan: \(nutriscoreData.score ?? 0)")
+                        .font(.subheadline)
+                }
+            
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
+        .padding(.horizontal)
+    }
+ 
+
 
 // ProgressBar bileşeni
 struct ProgressBar: View {
@@ -278,4 +345,5 @@ struct ProgressBar: View {
             }
         }
     }
+    
 }

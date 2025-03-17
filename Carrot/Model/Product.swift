@@ -1,25 +1,35 @@
 import Foundation
 
+// Ana ürün yapısı
 struct Product: Decodable {
+    let id: String
+    let code: String
     let productName: String?
+    let brands: String?
     let ingredientsText: String?
     let nutriscoreGrade: String?
     let ecoscoreGrade: String?
     let imageURL: String?
     let nutriments: Nutriments?
-    let nutriscoreData: NutriscoreData?  // Yeni veri ekleme
+    let nutriscoreData: NutriscoreData?
+    let ecoscoreData: EcoScoreData?  // Yeni EcoScoreData yapısı eklendi
     
     enum CodingKeys: String, CodingKey {
+        case id = "_id"
+        case code = "code"
         case productName = "product_name"
+        case brands = "brands"
         case ingredientsText = "ingredients_text"
         case nutriscoreGrade = "nutriscore_grade"
         case ecoscoreGrade = "ecoscore_grade"
         case imageURL = "image_url"
         case nutriments
-        case nutriscoreData = "nutriscore_data"  // JSON'daki veriye karşılık gelen key
+        case nutriscoreData = "nutriscore_data"
+        case ecoscoreData = "ecoscore_data"  // EcoScoreData anahtar adı
     }
 }
 
+// Besin değerleri için yapı
 struct Nutriments: Decodable {
     let energyKcal: Double?
     let fat100g: Double?
@@ -44,7 +54,7 @@ struct Nutriments: Decodable {
     }
 }
 
-// Yeni NutriscoreData yapısı
+// Nutri-Score detayları için yapı
 struct NutriscoreData: Decodable {
     let energy: Double?
     let energyPoints: Int?
@@ -84,5 +94,22 @@ struct NutriscoreData: Decodable {
         case positivePoints = "positive_points"
         case score = "score"
         case grade = "grade"
+    }
+}
+
+// Eco-Score detayları için yapı
+struct EcoScoreData: Decodable {
+    let grade: String?
+    let score: Int?
+    let environmentalImpact: String?
+    let positivePoints: Int?
+    let negativePoints: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case grade = "grade"
+        case score = "score"
+        case environmentalImpact = "environmental_impact"
+        case positivePoints = "positive_points"
+        case negativePoints = "negative_points"
     }
 }

@@ -6,6 +6,7 @@
 //
 import Foundation
 
+
 class ProductService {
     func fetchProduct(by barcode: String, completion: @escaping (Result<Product, Error>) -> Void) {
         let urlString = "https://world.openfoodfacts.org/api/v2/product/\(barcode).json"
@@ -29,6 +30,9 @@ class ProductService {
                 let result = try JSONDecoder().decode(OpenFoodFactsResponse.self, from: data)
                 if let productData = result.product {
                     completion(.success(productData))
+                    
+                  
+                                    
                 } else {
                     completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Ürün bulunamadı."])))
                 }
@@ -42,3 +46,4 @@ class ProductService {
 struct OpenFoodFactsResponse: Decodable {
     let product: Product?
 }
+

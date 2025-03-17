@@ -8,64 +8,62 @@
 import SwiftUI
 
 struct TabbarView: View {
-    var body: some View {
-        ZStack {
-                   VStack {
-                       // TabView üstüne çizgi eklemek için
-                       Rectangle()
-                           .fill(Color.gray.opacity(0.7))
-                           .frame(height: 2)
-                           .edgesIgnoringSafeArea(.top)
+    @State private var selectedTab = 1
 
-                       TabView(selection: .constant(3)) {
-                           HistoryView()
-                               .tabItem {
-                                   Image(systemName: "clock.arrow.circlepath")
-                                   Text("History")
-                               }
-                               .tag(1)
-                           
-                           HistoryView()
-                               .tabItem {
-                                   Image(systemName: "rectangle.grid.2x2")
-                                   Text("Overview")
-                               }
-                               .tag(2)
-                           
-                           ScannerView()
-                               .tabItem {
-                                   VStack {
-                                       ZStack {
-                                           Circle()
-                                               .fill(Color.green)
-                                               .frame(width: 40, height: 40)
-                                           Image(systemName: "barcode.viewfinder")
-                                               .foregroundColor(.white)
-                                       }
-                                       Text("Scanner")
-                                   }
-                               }
-                               .tag(3)
-                           
-                           HistoryView()
-                               .tabItem {
-                                   Image(systemName: "lightbulb")
-                                   Text("Lead")
-                               }
-                               .tag(4)
-                           
-                           HistoryView()
-                               .tabItem {
-                                   Image(systemName: "person.crop.circle")
-                                   Text("Profile")
-                               }
-                               .tag(5)
-                       }
-                       .accentColor(.gray.opacity(0.7))
-                   }
-               }
-           }
-       }
+    var body: some View {
+      
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Image("Home")
+                            .renderingMode(.template)
+                        Text("Home")
+                    }
+                    .tag(0)
+                
+                FavoriteView()
+                    .tabItem {
+                        Image("Favorite")
+                            .renderingMode(.template)
+                        Text("Favorite")
+                    }
+                    .tag(1)
+                
+                ScannerView()
+                    .tabItem {
+                        Image("Scanner")
+                        
+                        
+                    }
+                    .tag(2)
+                
+               HistoryView()
+                    .tabItem {
+                        Image("Clock")
+                            .renderingMode(.template)
+                        Text("History")
+                    }
+                    .tag(3)
+                
+                ProfileView()
+                    .tabItem {
+                        Image("profile")
+                            .renderingMode(.template)
+                        Text("Profile")
+                          
+                    }
+                    .tag(4)
+            }
+           
+            .accentColor(Color.white)
+            .font(.footnote)
+            
+        }
+             
+         }
+     
+           
+       
 #Preview {
     TabbarView()
 }
